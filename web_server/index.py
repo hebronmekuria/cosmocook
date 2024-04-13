@@ -83,17 +83,17 @@ def ask_question():
     question = request.args.get('question')
     return cosmo_cook.ask_question(question)
 
-@socketio.on('ASK_QUESTION')
-def handle_ask_question(data):
-    question = data['question']
-    response = cosmo_cook.ask_question(question)
-    socketio.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': { 'response': response} }))
-    
-@socketio.on('GET_RECIPE')
-def handle_get_recipe(data):
-    search = data['search']
-    recipe = cosmo_cook.get_recipe(search)
-    socketio.send(json.dumps({'type': 'RECIPE', 'data': { 'recipe': recipe }}))
+@socketio.on('message')
+def handle_message(message):
+    data = json.loads(message)
+    if data['type'] == 'ASK_QUESTION':
+        question = data['data']['question']
+        response = cosmo_cook.ask_question(question)
+        socketio.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
+    elif data['type'] == 'GET_RECIPE':
+        search = data['data']['search']
+        recipe = cosmo_cook.get_recipe(search)
+        socketio.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))
     
 if __name__ == '__main__':
     hostname = socket.gethostname()
