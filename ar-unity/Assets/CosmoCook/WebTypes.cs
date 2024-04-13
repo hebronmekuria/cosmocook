@@ -1,107 +1,80 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class CookTimeMinutes
+[Serializable]
+public class Ingredient
 {
-    public string type { get; set; }
-    public int minimum { get; set; }
+    public string name;
+    public string quantity;
+    public string unit;
 }
 
-public class Description
+[Serializable]
+public class Step
 {
-    public string type { get; set; }
-}
-
-public class ImageUrl
-{
-    public string type { get; set; }
-    public string format { get; set; }
-}
-
-public class Ingredients
-{
-    public string type { get; set; }
-    public Items items { get; set; }
-}
-
-public class Items
-{
-    public string type { get; set; }
-    public Properties properties { get; set; }
-    public List<string> required { get; set; }
-}
-
-public class Name
-{
-    public string type { get; set; }
-}
-
-public class PrepTimeMinutes
-{
-    public string type { get; set; }
-    public int minimum { get; set; }
-}
-
-public class Properties
-{
-    public RecipeName recipe_name { get; set; }
-    public Description description { get; set; }
-    public PrepTimeMinutes prep_time_minutes { get; set; }
-    public CookTimeMinutes cook_time_minutes { get; set; }
-    public TotalTimeMinutes total_time_minutes { get; set; }
-    public Ingredients ingredients { get; set; }
-    public Steps steps { get; set; }
-    public Servings servings { get; set; }
-    public Name name { get; set; }
-    public Quantity quantity { get; set; }
-    public Unit unit { get; set; }
-    public StepNumber step_number { get; set; }
-    public ImageUrl image_url { get; set; }
-}
-
-public class Quantity
-{
-    public string type { get; set; }
-}
-
-public class RecipeName
-{
-    public string type { get; set; }
+    public int step_number;
+    public string description;
+    public string image_url;
 }
 
 [Serializable]
 public class RecipeData
 {
-    public string type { get; set; }
-    public Properties properties { get; set; }
-    public List<string> required { get; set; }
+    public string recipe_name;
+    public string description;
+    public int prep_time_minutes;
+    public int cook_time_minutes;
+    public int total_time_minutes;
+    public List<Ingredient> ingredients;
+    public List<Step> steps;
+    public int servings;
+
+    public RecipeData()
+    {
+        Debug.Log("Creating recipe data");
+    }
+
+    public override string ToString()
+    {
+        return recipe_name;
+    }
 }
 
-public class Servings
+[Serializable]
+public class PopupData
 {
-    public string type { get; set; }
-    public int minimum { get; set; }
+    public string text;
+    public string image;
+    public string video_url;
+
+    public PopupData()
+    {
+        Debug.Log("new popup");
+    }
+
+    public override string ToString()
+    {
+        return text + " : " + image + video_url;
+    }
 }
 
-public class StepNumber
+
+
+[Serializable]
+public class Request_GetRecipe
 {
-    public string type { get; set; }
+    public string type;
+    public Query data;
 }
 
-public class Steps
+[Serializable]
+public class Query
 {
-    public string type { get; set; }
-    public Items items { get; set; }
-}
+    public string query;
 
-public class TotalTimeMinutes
-{
-    public string type { get; set; }
-    public int minimum { get; set; }
+    public Query(string q_f)
+    {
+        query = q_f;
+    }
 }
-
-public class Unit
-{
-    public string type { get; set; }
-}
-

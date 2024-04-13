@@ -15,8 +15,14 @@ public class MainConnections : MonoBehaviour
 
         if (autoConnectWebSocket)
         {
-            StartCoroutine(_ConnectWebSocket(webSocketUrl));
+            Connect();
         }
+    }
+
+    [ContextMenu("func Connect")]
+    public void Connect()
+    {
+        StartCoroutine(_ConnectWebSocket(webSocketUrl));
     }
 
     private bool ConnectWebsocket(string connectionString)
@@ -24,24 +30,21 @@ public class MainConnections : MonoBehaviour
         return transform.GetComponent<WebSocketClient>().ReConnect(connectionString);
     }
 
-    IEnumerator _ConnectWebSocket(string connectionString, string color, string name, int num)
+    IEnumerator _ConnectWebSocket(string connectionString)
     {
-        while (!ConnectWebsocket(connectionString, color, name, num))
+        int i = 0;
+        while (!ConnectWebsocket(connectionString) && i < 5)
         {
-            yield return new WaitForSeconds(5f);
-
-            Debug.Log("WebSocket: Connection Failed. Trying again in 5 seconds.");
+            Debug.Log("WebSocket: Connection Failed. Trying again in 2 seconds.");
             websocketConnected = false;
+
+            yield return new WaitForSeconds(2f);
+            i += 1;
         }
 
         websocketConnected = true;
 
         Debug.Log("WebSocket: Connection Successful");
-    }
-
-    public void ConnectToWebsocket(string connectionString, string color, string name)
-    {
-        StartCoroutine(_ConnectWebSocket(connectionString, color, name, 1));
     }
 
     public string getWebsocketURL()

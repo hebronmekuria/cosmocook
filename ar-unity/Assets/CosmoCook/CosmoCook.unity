@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98342a7f58a34dd41baf57540ee1c6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PopupPrefab: {fileID: 0}
+  PopupPrefab: {fileID: 1579505427444107902, guid: 2cfc62bece6ee9943a3cc9cc779297ef, type: 3}
 --- !u!4 &1068330960
 Transform:
   m_ObjectHideFlags: 0
@@ -863,58 +863,6 @@ Transform:
   - {fileID: 8587249466170263283}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1761523407
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1761523408}
-  - component: {fileID: 1761523409}
-  m_Layer: 0
-  m_Name: Popup
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1761523408
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761523407}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1761523409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761523407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 460a1f4bc2c9f354a8fc95a1ce02a445, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineHeight: 0
-  imageHeight: 0
-  Clip: {fileID: 0}
-  Text: {fileID: 0}
-  Image: {fileID: 0}
-  Backplate: {fileID: 0}
-  Checkbox: {fileID: 0}
-  autoDestroy: 1
 --- !u!114 &553411386938408859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,7 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b9c6073978d284393c20167deed91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  webSocketUrl: ws://ec2-52-15-178-2.us-east-2.compute.amazonaws.com/hololens
+  webSocketUrl: ws://35.2.129.165:8001
   autoConnectWebSocket: 0
 --- !u!4 &1006371008966021930
 Transform:
@@ -1134,4 +1082,3 @@ SceneRoots:
   - {fileID: 1628295348}
   - {fileID: 1006371008966021930}
   - {fileID: 1068330960}
-  - {fileID: 1761523408}
