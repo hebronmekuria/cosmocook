@@ -2,13 +2,10 @@ import google.generativeai as genai
 import os
 import cv2
 import shutil
-# from hololens_api.stream_reader import find_newest_snip
-from stream_reader import find_newest_snip
+from hololens_api.stream_reader import find_newest_snip
+# from stream_reader import find_newest_snip
 
-GOOGLE_API_KEY="AIzaSyD2uJRKkpnRj6j89qQGB2gz6Hrk3xbASTI"
-genai.configure(api_key=GOOGLE_API_KEY)
-
-FRAME_EXTRACTION_DIRECTORY = "./content/frames"
+FRAME_EXTRACTION_DIRECTORY = "./hololens_api/content/frames"
 FRAME_PREFIX = "_frame"
 
 # Create or cleanup existing extracted image frames directory.
@@ -75,6 +72,9 @@ def prompt_with_latest_image(prompt="Describe this video.", full_video=False):
     """
     Upload full video or last ten seconds: bool full_video
     """
+    GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
+    genai.configure(api_key=GOOGLE_API_KEY)
+    print(GOOGLE_API_KEY)
     video_file_name = find_newest_snip()
     extract_frame_from_video(video_file_path=video_file_name)
 
@@ -96,9 +96,9 @@ def prompt_with_latest_image(prompt="Describe this video.", full_video=False):
 
     print(f"Completed file uploads!\n\nUploaded: {len(uploaded_files)} files")
 
-    # List files uploaded in the API
-    for n, f in zip(range(len(uploaded_files)), genai.list_files()):
-        print(f.uri)
+    # # List files uploaded in the API
+    # for n, f in zip(range(len(uploaded_files)), genai.list_files()):
+    #     print(f.uri)
 
     # Set the model to Gemini 1.5 Pro.
     model = genai.GenerativeModel(model_name="models/gemini-1.5-pro-latest")

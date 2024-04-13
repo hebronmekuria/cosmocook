@@ -2,7 +2,7 @@ import cv2
 import os
 
 
-def find_newest_snip(dir="./snips"):
+def find_newest_snip(dir="./hololens_api/snips"):
     max_mtime = 0
     for dirname,subdirs,files in os.walk(dir):
         for fname in files:

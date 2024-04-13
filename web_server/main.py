@@ -3,14 +3,15 @@ from flask_socketio import SocketIO, emit
 from google_api.search import get_recipe_from_search
 from google_api.question import get_question_response
 from hololens_api.stream import main_stream
+from hololens_api.gemini_images import prompt_with_latest_image
 import google.generativeai as genai
 import redis
 import os
-from dotenv import load_dotenv
 import threading
 import socket
 import json
 
+from dotenv import load_dotenv
 load_dotenv()
 
 GET_STREAM = False
