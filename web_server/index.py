@@ -1,11 +1,15 @@
 from flask import Flask, request
 from google_api.search import get_recipe_from_search
 from google_api.question import get_question_response
+from hololens_api.stream import main_stream
 import google.generativeai as genai
 import redis
 import os
 from dotenv import load_dotenv
+import threading
 load_dotenv()
+
+GET_STREAM = False
 
 app = Flask(__name__)
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST'), port=19005, username='default', password=os.getenv('REDIS_PASSWORD'), db=0)
@@ -15,6 +19,11 @@ model = genai.GenerativeModel('gemini-pro')
 
 class CosmoCook:
     def __init__(self, app):
+        if GET_STREAM:
+            self.stream = threading.Thread(target=main_stream)
+            self.stream.start()
+        else:
+            self.stream = None
         self.app = app
         self.recipe = {}
         self.question = {}
