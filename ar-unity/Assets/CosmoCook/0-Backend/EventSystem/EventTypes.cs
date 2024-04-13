@@ -18,6 +18,28 @@ public class MainScreen_ShowData_Event
         image = image_f;
     }
 }
+public class IngredientFound_Event
+{
+    public string ingredient;
+
+    public IngredientFound_Event(string ingredient_f)
+    {
+        Debug.Log("IngredientFound_Event");
+        ingredient = ingredient_f;
+    }
+}
+
+public class IngredientsScreen_ShowData_Event
+{
+    public RecipeData recipeData;
+
+    public IngredientsScreen_ShowData_Event(RecipeData r_f)
+    {
+        Debug.Log("IngredientsScreen_ShowData_Event");
+        recipeData = r_f;
+    }
+}
+
 
 public class LoadingStarted_Event
 {

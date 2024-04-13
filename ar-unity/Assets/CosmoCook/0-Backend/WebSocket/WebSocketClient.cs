@@ -109,7 +109,7 @@ public class WebSocketClient : MonoBehaviour
     [ContextMenu("func DEBUG QUESTION_RESPONSE")]
     public void THISISALSOADEBUGFUNCTION()
     {
-        var json = ;
+        var json = "{\"type\": \"QUESTION_RESPONSE\", \"data\": {\"text\": \"This is a random popup wahhhh\",\"image\": \"\",\"video_url\": \"\"}}";
         HandleJsonMessage(json);
     }
 
@@ -132,6 +132,10 @@ public class WebSocketClient : MonoBehaviour
             case "QUESTION_RESPONSE":
                 PopupMessage json1 = JsonUtility.FromJson<PopupMessage>(jsonData);
                 dataHandler.RecvResponse_Popup(json1.data);
+                break;
+            case "INGREDIENT_RESPONSE":
+                IngredientMessage json2 = JsonUtility.FromJson<IngredientMessage>(jsonData);
+                dataHandler.RecvResponse_Popup(json2.data);
                 break;
             default:
                 Debug.LogWarning("Unknown message type: " + messageType);
@@ -171,6 +175,18 @@ public class PopupMessage
 {
     public string type;
     public PopupData data;
+
+    public override string ToString()
+    {
+        return type + " " + data.ToString();
+    }
+}
+
+[Serializable]
+public class IngredientMessage
+{
+    public string type;
+    public string data;
 
     public override string ToString()
     {

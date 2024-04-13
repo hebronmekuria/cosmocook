@@ -20,8 +20,15 @@ public class Popup : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(DestroyAfterSeconds(5f));
-        Checkbox.gameObject.SetActive(false);
+        // StartCoroutine(DestroyAfterSeconds(5f));
+        // Checkbox.gameObject.SetActive(false);
+
+        IEnumerator _SetBackplate()
+        {
+            yield return new WaitForSeconds(.5f);
+            SetBackplateSize();
+        }
+        StartCoroutine(_SetBackplate());
     }
 
     IEnumerator DestroyAfterSeconds(float seconds)
@@ -58,6 +65,7 @@ public class Popup : MonoBehaviour
             SetBackplateSize();
         }
 
+        WasMoved(); // TEMP
         StartCoroutine(_SetBackplate());
 
         GetComponent<AudioSource>().PlayOneShot(Clip);
