@@ -45,3 +45,15 @@ public class CreatePopup_Event
         Debug.Log("CreatePopup_Event");
     }
 }
+
+
+public class RecipeDataReceived_Event
+{
+    public RecipeData Recipe;
+
+    public RecipeDataReceived_Event(RecipeData recipe_f)
+    {
+        Recipe = recipe_f;
+        Debug.Log("RecipeDataReceived_Event");
+    }
+}
