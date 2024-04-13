@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <video controls autoplay width="814" id="mrcLivePreviewPlayer">
+            <source id="stream_src" src="" type="video/mp4">
+        </video>
+    </div>
+</body>
+<script>
+    var source = document.getElementById('stream_src');
+    var hololens_ip = "100.64.13.144";
+    var api_endpoint = `https://${hololens_ip}/api/holographic/stream/live_high.mp4?holo=true&pv=true&mic=false&loopback=true&RenderFromCamera=true`;
+    source.setAttribute('src', api_endpoint);
+</script>
+</html>
