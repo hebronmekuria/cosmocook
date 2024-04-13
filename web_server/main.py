@@ -3,7 +3,7 @@ import asyncio
 import websockets
 import json
 from google_api.search import get_recipe_from_search
-from google_api.question import get_question_response, search_youtube
+from google_api.question import get_question_response, search_youtube, convert_unit
 from google_api.image_request import get_first_image_base64
 from hololens_api.stream import main_stream
 from hololens_api.gemini_images import prompt_with_latest_image
@@ -156,8 +156,8 @@ class CosmoCook:
             api_key = keys[0]
         
         genai.configure(api_key=api_key)
-        tool_config = self.tool_config_from_mode("any", ["get_first_image_base64", "search_youtube"])
-        model = genai.GenerativeModel('gemini-pro', tools=[get_first_image_base64, search_youtube], tool_config=tool_config)
+        tool_config = self.tool_config_from_mode("any", ["get_first_image_base64", "search_youtube", "convert_unit"])
+        model = genai.GenerativeModel('gemini-pro', tools=[get_first_image_base64, search_youtube, convert_unit], tool_config=tool_config)
         redis_client.set('last_key_used', last_key_used + 1)
         
         self.chat = model.start_chat(enable_automatic_function_calling=True)
