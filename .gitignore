@@ -4,6 +4,8 @@
 #
 /env
 /web_server/env
+/__pycache__
+/web_server/__pycache__
 
 /ar-unity/[Ll]ibrary/
 /ar-unity/[Tt]emp/
