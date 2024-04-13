@@ -3,7 +3,8 @@ import asyncio
 import websockets
 import json
 from google_api.search import get_recipe_from_search
-from google_api.question import get_question_response, search_images, search_youtube
+from google_api.question import get_question_response, search_youtube
+from google_api.image_request import get_first_image_base64
 from hololens_api.stream import main_stream
 from hololens_api.gemini_images import prompt_with_latest_image
 import google.generativeai as genai
@@ -52,6 +53,7 @@ class CosmoCook:
             recipe = get_recipe_from_search(search, self.chat, redis_client, no_cache)
             print('Recipe fetched from search')
             recipe = recipe.replace('\n', ' ').replace('\"', '"')
+            recipe = recipe.replace('```json', '').replace('```', '')
             
             try:
                 recipe = json.loads(recipe)
@@ -144,8 +146,8 @@ class CosmoCook:
             api_key = keys[0]
         
         genai.configure(api_key=api_key)
-        tool_config = self.tool_config_from_mode("any", ["search_images", "search_youtube"])
-        model = genai.GenerativeModel('gemini-pro', tools=[search_images, search_youtube], tool_config=tool_config)
+        tool_config = self.tool_config_from_mode("any", ["get_first_image_base64", "search_youtube"])
+        model = genai.GenerativeModel('gemini-pro', tools=[get_first_image_base64, search_youtube], tool_config=tool_config)
         redis_client.set('last_key_used', last_key_used + 1)
         
         self.chat = model.start_chat(enable_automatic_function_calling=True)
@@ -166,13 +168,16 @@ def get_recipe():
     no_cache = request.args.get('no_cache') == 'true'
     return cosmo_cook.get_recipe(search, no_cache)
 
+@app.route('/delete_all_cache')
+def delete_all_cache():
+    redis_client.flushdb()
+    return "Cache deleted"
 
 @app.route('/api/ask_question')
 def ask_question():
     question = request.args.get('question')
     no_cache = request.args.get('no_cache') == 'true'
     return cosmo_cook.ask_question(question, no_cache)
-
 
 async def handle_message(websocket, path):
     async for message in websocket:

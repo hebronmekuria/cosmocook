@@ -16,7 +16,7 @@ def get_question_response(json_data, question, chat, redis_client):
     prompt = f"""You are a professional chef that can give expert advice on recipes. You will be given a recipe that is formatted in JSON alongside a question. Please answer the question fully and eloquently.
         You have access to the following tools:
         - search_youtube(query: str) -> str: Searches YouTube for a relevant video and returns the video URL.
-        - search_images(query: str) -> str: Searches Google Images for a relevant image and returns the base64-encoded image data.
+        - get_first_image_base64(query: str) -> str: Searches Google Images for a relevant image and returns the base64-encoded image data.
 
         Analyze the question and determine if a video or image would enhance your response. If so, use the appropriate tool to find relevant media.
 

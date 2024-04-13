@@ -27,7 +27,7 @@ def image_to_base64(url):
     print("Error fetching image:", response.status_code)
     return None
 
-def get_first_image_base64(query):
+def get_first_image_base64(query: str) -> str:
     file_query = query.replace(" ", "_")
     file = f"image_data/{file_query}.txt"
     if os.path.exists(file):
