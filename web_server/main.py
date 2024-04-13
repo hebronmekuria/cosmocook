@@ -42,7 +42,8 @@ class CosmoCook:
         self.start_chat()
         if cached_data and not no_cache:
             print('Cache hit, returning cached recipe')
-            return cached_data.decode('utf-8')
+            self.recipe = json.loads(cached_data.decode('utf-8'))
+            return self.recipe
         else:
             recipe = get_recipe_from_search(search, self.chat, redis_client, no_cache)
             print('Recipe fetched from search')
@@ -61,6 +62,21 @@ class CosmoCook:
             redis_client.set(cache_key, json.dumps(recipe))
             
             return recipe
+
+    def get_ingredient(self):
+        # 'ingredients': [{'name':'onion'}, {'name':'celery'}, {'name':'chicken'}]
+        
+        ingredients = [x.get('name', "N/A").lower() for x in self.recipe.get('ingredients', {})]
+        print("Ingredients ", ingredients)
+        if not ingredients:
+            return "N/A"
+        
+        prompt = f"Describe which ingredient is being held in the hand in the image given. Make sure that the ingredient comes from this list of ingredients {ingredients}. Return a response as a single string: '<ingredient_name>'"
+        res = prompt_with_latest_image(prompt).strip().lower().replace('\'', '')
+        print(f"Response: {res}")
+        if res in ingredients:
+            return res
+        return "N/A"
 
     def download_images(self, recipe, no_cache = False):
         image_count = 0
@@ -185,6 +201,11 @@ async def handle_message(websocket, path):
             search = data['data']['query']
             recipe = cosmo_cook.get_recipe(search)
             await websocket.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))
+        elif data['type'] == 'GET_INGREDIENT':
+            print('Received GET_INGREDIENT')
+            ingredient = cosmo_cook.get_ingredient()
+            if ingredient != "N/A":
+                await websocket.send(json.dumps({'type': 'INGREDIENT_RESPONSE', 'data': ingredient}))
 
 def get_ip():
     try:
@@ -203,13 +224,13 @@ class FlaskAppProcess(multiprocessing.Process):
 
 class WebSocketServerProcess(multiprocessing.Process):
     def run(self):
-        start_server = websockets.serve(handle_message, "0.0.0.0", 8001)
+        start_server = websockets.serve(handle_message, "0.0.0.0", 8001)    
         print(f"Websocket server started on ws://{get_ip()}:8001")
         asyncio.get_event_loop().run_until_complete(start_server)
         asyncio.get_event_loop().run_forever()
 
 if __name__ == "__main__":
-    flask_process = FlaskAppProcess()
+    flask_process = FlaskAppProcess()    
     ws_process = WebSocketServerProcess()
 
     flask_process.start()
