@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -875,8 +875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b9c6073978d284393c20167deed91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  webSocketUrl: ws://35.2.129.165:8001
-  autoConnectWebSocket: 0
+  webSocketUrl: ws://35.2.236.135:8001
+  autoConnectWebSocket: 1
 --- !u!4 &1006371008966021930
 Transform:
   m_ObjectHideFlags: 0
@@ -963,6 +963,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainScreen: {fileID: 8462204002270108343, guid: a94de1729d7fb94458302f9f7bd65cf9, type: 3}
+  IngredientScreen: {fileID: 8462204002270108343, guid: 3d9f8c08cac54b346b33ae0d2a22174d, type: 3}
 --- !u!33 &8587249466170263282
 MeshFilter:
   m_ObjectHideFlags: 0

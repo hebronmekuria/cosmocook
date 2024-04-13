@@ -78,3 +78,10 @@ public class Query
         query = q_f;
     }
 }
+
+[Serializable]
+public class Request_GetIngredient
+{
+    public string type;
+    public string data;
+}

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Device;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     public static RecipeData Recipe = null;
     public static int CurrentIndex = 0;
     public GameObject MainScreen;
+    public GameObject IngredientScreen;
 
     private void Start()
     {
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(delay);
             screen.SetActive(true);
-            screen.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
+            screen.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
         }
 
         GameObject g = Instantiate(screenPrefab);
@@ -48,6 +50,18 @@ public class GameManager : MonoBehaviour
         CurrentIndex = 0;
 
         GoToStep(CurrentIndex);
+
+        GameObject g = Instantiate(IngredientScreen);
+        g.SetActive(false);
+        g.SetActive(true);
+        g.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
+
+        IEnumerator _CallEvent()
+        {
+            yield return new WaitForSeconds(0.1f);
+            EventBus.Publish<IngredientsScreen_ShowData_Event>(new(Recipe));
+        }
+        StartCoroutine(_CallEvent());
     }
 
     public static void GoToStep(int index)

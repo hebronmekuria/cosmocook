@@ -12,15 +12,12 @@ public class IngredientsScreen : MonoBehaviour
     public float titleHeight;
     public float lineHeight;
     public float imageHeight;
+    public float startIngredients;
     public string debugText;
-    public string imageText;
 
     public TextMeshPro Title;
     public TextMeshPro Text;
     public Transform Backplate;
-    public Transform CarryModeBackplate;
-    public Transform NextButton;
-    public GameObject Characters;
 
     public AudioClip Clip;
 
@@ -38,13 +35,7 @@ public class IngredientsScreen : MonoBehaviour
         float init_y = Backplate.localPosition.y;
         float init_height = Backplate.localScale.y;
 
-        float height = titleHeight + (lineHeight * Text.textInfo.lineCount);
-
-        Characters.transform.localPosition = new Vector3(
-            Characters.transform.localPosition.x,
-            -height + 0.05f,
-            Characters.transform.localPosition.z
-        );
+        float height = titleHeight + (lineHeight * Text.textInfo.lineCount) + (lineHeight * Ingredients.Count);
 
         height += 0.06f;
 
@@ -73,11 +64,14 @@ public class IngredientsScreen : MonoBehaviour
         Text.text = "Estimated " + e.recipeData.cook_time_minutes.ToString() + " minutes";
 
         // create all ingredients list
+        int j = 0;
         foreach (Ingredient i in e.recipeData.ingredients)
         {
             IngredientItem item = Instantiate(IngredientPrefab, transform).GetComponent<IngredientItem>();
             item.Init(i);
             Ingredients.Add(item);
+            item.gameObject.transform.localPosition = new Vector3(-0.304f, -j*lineHeight, 0.304f);
+            j++;
         }
 
         IEnumerator _SetBackplate()

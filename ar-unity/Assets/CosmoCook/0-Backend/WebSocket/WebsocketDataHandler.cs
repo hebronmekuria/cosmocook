@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEditor.Search;
 
 /*
 Name: Brian Schneider
@@ -11,6 +12,7 @@ public class WebsocketDataHandler : MonoBehaviour
 {
     private WebSocketClient wsClient;
     [SerializeField] private bool debugMode = false;
+
 
     public void Start()
     {
@@ -54,5 +56,19 @@ public class WebsocketDataHandler : MonoBehaviour
     public void Debugthis()
     {
         SendRequest_GetRecipe("greek salad");
+    }
+
+    public void SendRequest_GetIngredient()
+    {
+        Request_GetIngredient request = new();
+        request.type = "GET_INGREDIENT";
+        request.data = "";
+
+        Debug.Log("(Send) Sending INITIAL data");
+
+        // Convert the combined data to JSON format and send to WebSocket client
+        string jsonData = JsonUtility.ToJson(request);
+
+        wsClient.SendJsonData(jsonData);
     }
 }

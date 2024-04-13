@@ -113,6 +113,14 @@ public class WebSocketClient : MonoBehaviour
         HandleJsonMessage(json);
     }
 
+
+    [ContextMenu("func DEBUG INGREDIENT_RESPONSE")]
+    public void THISISANOTHERDEBUGFUNCTION()
+    {
+        var json = "{\"type\": \"INGREDIENT_RESPONSE\", \"data\": \"Tomatoes\"}";
+        HandleJsonMessage(json);
+    }
+
     public void HandleJsonMessage(string jsonData)
     {
         // Deserialize the JSON into JsonMessage class
