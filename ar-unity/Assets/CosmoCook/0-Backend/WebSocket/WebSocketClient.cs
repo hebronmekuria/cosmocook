@@ -88,39 +88,7 @@ public class WebSocketClient : MonoBehaviour
         catch (Exception ex)
         {
             // Handle or log the exception
-            //Debug.LogError("Error occurred in ReConnect method: " + ex.Message);
-            return false;
-        }
-    }
-
-
-    public bool ReConnect(string connectionString, string color, string name)
-    {
-        try
-        {
-            if (ws != null && ws.IsAlive)
-            {
-                #if !UNITY_WEBGL
-                    ws.Close();
-                #endif
-            }
-
-            webSocketUrl = connectionString;
-            #if !UNITY_WEBGL
-                ws = new WebSocket(webSocketUrl);
-                ws.OnMessage += OnWebSocketMessage;
-                ws.Connect();
-
-                dataHandler.SendInitialData(color, name);
-                return ws.IsAlive;
-            #endif
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            // Handle or log the exception
-            //Debug.LogError("Error occurred in ReConnect method: " + ex.Message);
+            Debug.LogError("Error occurred in ReConnect method: " + ex.Message);
             return false;
         }
     }
@@ -165,14 +133,16 @@ public class WebSocketClient : MonoBehaviour
         // Deserialize the JSON into JsonMessage class
         JsonMessage jsonMessage = JsonUtility.FromJson<JsonMessage>(jsonData);
 
+        Debug.Log("Received json :" + jsonData);
+
         // Determine the type of data
         string messageType = jsonMessage.type;
 
         switch (messageType)
         {
-            case "INITIAL":
-                InitialData initialData = JsonUtility.FromJson<InitialData>(jsonData);
-                dataHandler.HandleInitialData(initialData, "");
+            case "RECIPE":
+                RecipeData json = JsonUtility.FromJson<RecipeData>(jsonData);
+                dataHandler.HandleRecipeData(json);
                 break;
             // Handle other message types similarly
             default:
@@ -194,17 +164,4 @@ public class WebSocketClient : MonoBehaviour
 public class JsonMessage
 {
     public string type;
-    public string use;
-    public int id;
-}
-
-[Serializable]
-public class InitialData
-{
-    public int id;
-    public string use;
-    public string color; // Hex values as a string. Ex: #223344
-    public string name; 
-    public string type;
-    public string data;
 }

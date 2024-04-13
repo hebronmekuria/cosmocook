@@ -17,67 +17,9 @@ public class WebsocketDataHandler : MonoBehaviour
         wsClient = GetComponent<WebSocketClient>();
     }
 
-    public void HandleInitialData(InitialData data, string use)
+    public void HandleRecipeData(RecipeData data)
     {
-        if (use == "GET")
-        {
-            if (debugMode) Debug.Log("(GET) WebsocketDataHandler.cs: Sending INITIAL data");
-
-            // Create a new CombinedData instance
-            InitialData combinedData = new InitialData
-            {
-                type = "Initial",
-                use = "PUT",
-                color = data.color,
-                name = data.name
-            };
-
-            // Convert the combined data to JSON format and send to WebSocket client
-            string jsonData = JsonUtility.ToJson(combinedData);
-
-            wsClient.SendJsonData(jsonData);
-        } 
-        else
-        {
-            try
-            {
-                InitialData combinedData = new InitialData
-                {
-                    type = "Initial",
-                    use = "PUT",
-                    color = data.color,
-                    name = data.name
-                };
-
-                // Convert the combined data to JSON format and send to WebSocket client
-                string jsonData = JsonUtility.ToJson(combinedData);
-
-                wsClient.SendJsonData(jsonData);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("An exception occurred: " + ex.Message);
-                try
-                {
-                    // Create a new CombinedData instance
-                    InitialData combinedData = new InitialData
-                    {
-                        id = 0,
-                        type = "INITIAL",
-                        data = "FAILURE"
-                    };
-
-                    // Convert the combined data to JSON format and send to WebSocket client
-                    string jsonData = JsonUtility.ToJson(combinedData);
-
-                    wsClient.SendJsonData(jsonData);
-                }
-                catch (Exception ex1)
-                {
-                    Debug.LogError("An exception occurred: " + ex1.Message);
-                }
-            }
-        }
+        EventBus.Publish<RecipeDataReceived_Event>(new(data));
     }
 
     // Public functions for to call to send data
@@ -86,6 +28,21 @@ public class WebsocketDataHandler : MonoBehaviour
         InitialData emptyInitials = new InitialData();
         emptyInitials.color = color;
         emptyInitials.name = name;
-        HandleInitialData(emptyInitials, "GET");
+        Debug.Log("TODO not impl");
+        // if (debugMode) Debug.Log("(GET) WebsocketDataHandler.cs: Sending INITIAL data");
+        // 
+        // // Create a new CombinedData instance
+        // InitialData combinedData = new InitialData
+        // {
+        //     type = "Initial",
+        //     use = "PUT",
+        //     color = data.color,
+        //     name = data.name
+        // };
+        // 
+        // // Convert the combined data to JSON format and send to WebSocket client
+        // string jsonData = JsonUtility.ToJson(combinedData);
+        // 
+        // wsClient.SendJsonData(jsonData);
     }
 }

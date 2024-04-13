@@ -15,19 +15,13 @@ public class MainConnections : MonoBehaviour
 
         if (autoConnectWebSocket)
         {
-            StartCoroutine(_ConnectWebSocket(webSocketUrl, "", "", 0));
+            StartCoroutine(_ConnectWebSocket(webSocketUrl));
         }
     }
 
-    private bool ConnectWebsocket(string connectionString, string color, string name, int num)
+    private bool ConnectWebsocket(string connectionString)
     {
-        if (num == 0)
-        {
-            return transform.GetComponent<WebSocketClient>().ReConnect(connectionString);
-        } else
-        {
-            return transform.GetComponent<WebSocketClient>().ReConnect(connectionString, color, name);
-        }
+        return transform.GetComponent<WebSocketClient>().ReConnect(connectionString);
     }
 
     IEnumerator _ConnectWebSocket(string connectionString, string color, string name, int num)

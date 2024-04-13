@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static RecipeData Recipe = null;
     public GameObject MainScreen;
 
     private void Start()
     {
         SpawnScreen(1, MainScreen);
+        EventBus.Subscribe<RecipeDataReceived_Event>(RecipeDataReceived);
     }
 
     public GameObject SpawnScreen(float delay, GameObject screenPrefab)
@@ -26,5 +28,10 @@ public class GameManager : MonoBehaviour
         StartCoroutine(_SpawnScreen(delay, g));
 
         return g;
+    }
+
+    private void RecipeDataReceived(RecipeDataReceived_Event e)
+    {
+        Recipe = e.Recipe;
     }
 }
