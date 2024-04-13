@@ -42,7 +42,8 @@ class CosmoCook:
         self.start_chat()
         if cached_data and not no_cache:
             print('Cache hit, returning cached recipe')
-            return cached_data.decode('utf-8')
+            self.recipe = json.loads(cached_data.decode('utf-8'))
+            return self.recipe
         else:
             recipe = get_recipe_from_search(search, self.chat, redis_client, no_cache)
             print('Recipe fetched from search')
@@ -64,7 +65,8 @@ class CosmoCook:
 
     def get_ingredient(self):
         # 'ingredients': [{'name':'onion'}, {'name':'celery'}, {'name':'chicken'}]
-        ingredients = [x.get('name', "N/A") for x in self.recipe.get('ingredients', {})]
+        
+        ingredients = [x.get('name', "N/A").lower() for x in self.recipe.get('ingredients', {})]
         print("Ingredients ", ingredients)
         if not ingredients:
             return "N/A"

@@ -4,6 +4,8 @@ import os
 
 def find_newest_snip(dir="./hololens_api/snips"):
     max_mtime = 0
+    max_dir = None
+    max_file = None
     for dirname,subdirs,files in os.walk(dir):
         for fname in files:
             full_path = os.path.join(dirname, fname)
