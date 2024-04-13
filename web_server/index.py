@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 import threading
 import socket
+import json
 
 load_dotenv()
 
@@ -86,13 +87,13 @@ def ask_question():
 def handle_ask_question(data):
     question = data['question']
     response = cosmo_cook.ask_question(question)
-    emit('QUESTION_RESPONSE', {'response': response})
+    socketio.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': { 'response': response} }))
     
 @socketio.on('GET_RECIPE')
 def handle_get_recipe(data):
     search = data['search']
     recipe = cosmo_cook.get_recipe(search)
-    emit('RECIPE_RESPONSE', {'recipe': recipe})
+    socketio.send(json.dumps({'type': 'RECIPE', 'data': { 'recipe': recipe }}))
     
 if __name__ == '__main__':
     hostname = socket.gethostname()
