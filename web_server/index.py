@@ -27,7 +27,7 @@ class CosmoCook:
         self.app.add_url_rule('/api/ask_question', 'ask_question', self.ask_question, methods=['GET'])
 
     def get_recipe(self):
-        search = request.args.get('search')
+        search = request.args.get('search') + ' recipe' # add 'recipe' to the search query to get more accurate results
         cache_key = f"recipe:{search}"
         cached_data = redis_client.get(cache_key)
         
@@ -36,7 +36,7 @@ class CosmoCook:
         if cached_data:
             return cached_data.decode('utf-8')
         else:
-            recipe = get_recipe_from_search(search + ' recipe', self.chat)
+            recipe = get_recipe_from_search(search, self.chat, redis_client)
             self.recipe = recipe
             redis_client.set(cache_key, recipe)
             return recipe

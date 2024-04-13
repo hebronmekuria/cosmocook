@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import google.generativeai as genai
 import os
+import json
 
 schema = """
             {
@@ -98,20 +99,20 @@ def get_text_from_url(url):
         print("Error fetching URL:", e)
         return None
 
-def get_recipe_from_search(query, chat):
+def get_recipe_from_search(query, chat, redis_client):
     first_url = get_first_google_url(query)
-    # print(first_url)
-    file_url = first_url.replace("https://", "").replace("http://", "").replace("/", "_")
-    file = os.path.join("google_api/data", file_url)
-    if os.path.exists(file):
-        with open(file, 'r') as f:
-            return f.read()
+    cache_key = f"recipe:{query}"
+    
+    # Check if the recipe is already cached in redis
+    cached_data = redis_client.get(cache_key)
+    if cached_data:
+        return cached_data.decode('utf-8')
+    
     text = get_text_from_url(first_url)
-    print(text)
-    # print(text)
     if text is None:
         print("Error fetching text from URL")
+
     response = chat.send_message("You are a professional chef, that can expertly create recipes. You will be given recipe that is scraped from the internet, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
-    with open(file, 'w+') as f:
-        f.write(response.text)
+    redis_client.set(cache_key, f"{response.text}")
+    
     return response.text
