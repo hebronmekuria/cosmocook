@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_socketio import SocketIO, emit
 from google_api.search import get_recipe_from_search
 from google_api.question import get_question_response
 from hololens_api.stream import main_stream
@@ -7,11 +8,14 @@ import redis
 import os
 from dotenv import load_dotenv
 import threading
+import socket
+
 load_dotenv()
 
 GET_STREAM = False
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins='*')
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST'), port=19005, username='default', password=os.getenv('REDIS_PASSWORD'), db=0)
 
 genai.configure(api_key=os.getenv('GENAI_API_KEY'))
@@ -29,19 +33,15 @@ class CosmoCook:
         self.question = {}
         self.image = {}
         self.chat = None
-        self.register_routes()
 
-    def register_routes(self):
-        self.app.add_url_rule('/api/get_recipe', 'get_recipe', self.get_recipe, methods=['GET'])
-        self.app.add_url_rule('/api/ask_question', 'ask_question', self.ask_question, methods=['GET'])
-
-    def get_recipe(self):
-        search = request.args.get('search') + ' recipe' # add 'recipe' to the search query to get more accurate results
+    def get_recipe(self, search):
+        search += ' recipe'  # add 'recipe' to the search query to get more accurate results
         cache_key = f"recipe:{search}"
         cached_data = redis_client.get(cache_key)
         
         # Start a new chat session
         self.start_chat()
+        
         if cached_data:
             return cached_data.decode('utf-8')
         else:
@@ -50,10 +50,10 @@ class CosmoCook:
             redis_client.set(cache_key, recipe)
             return recipe
 
-    def ask_question(self):
-        question = request.args.get('question')
-        cache_key = f"question:{self.recipe.recipe_name}:{question}"
+    def ask_question(self, question):
+        cache_key = f"question:{self.recipe['recipe_name']}:{question}"
         cached_data = redis_client.get(cache_key)
+        
         if cached_data:
             return cached_data.decode('utf-8')
         else:
@@ -61,13 +61,42 @@ class CosmoCook:
             self.question = response
             redis_client.set(cache_key, response)
             return response
-        
+
     def start_chat(self):
         self.chat = model.start_chat()
-        
         return self.chat
 
 cosmo_cook = CosmoCook(app)
 
+@app.route('/')
+def index():
+    return "Cosmo Cook is running!"
+
+@app.route('/api/get_recipe')
+def get_recipe():
+    search = request.args.get('search')
+    return cosmo_cook.get_recipe(search)
+
+@app.route('/api/ask_question')
+def ask_question():
+    question = request.args.get('question')
+    return cosmo_cook.ask_question(question)
+
+@socketio.on('ASK_QUESTION')
+def handle_ask_question(data):
+    question = data['question']
+    response = cosmo_cook.ask_question(question)
+    emit('QUESTION_RESPONSE', {'response': response})
+    
+@socketio.on('GET_RECIPE')
+def handle_get_recipe(data):
+    search = data['search']
+    recipe = cosmo_cook.get_recipe(search)
+    emit('RECIPE_RESPONSE', {'recipe': recipe})
+    
 if __name__ == '__main__':
-    app.run()
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    print(f"WebSocket URL: ws://{ip_address}:5000")
+    
+    socketio.run(app, host='0.0.0.0', debug=True)
