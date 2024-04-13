@@ -5,6 +5,7 @@ import requests
 import base64
 from PIL import Image
 import redis
+import pint
 
 YOUTUBE_API_KEY = os.getenv("GOOGLE_CONSOLE_API_KEY")
 
@@ -17,6 +18,7 @@ def get_question_response(json_data, question, chat, redis_client):
         You have access to the following tools:
         - search_youtube(query: str) -> str: Searches YouTube for a relevant video and returns the video URL.
         - get_first_image_base64(query: str) -> str: Searches Google Images for a relevant image and returns the base64-encoded image data.
+        - convert_unit(ingredient: str, quantity: float, original_unit: str, target_unit: str) -> str: Converts a quantity from one unit to another for a specific ingredient (using pint.UnitRegistry)
 
         Analyze the question and determine if a video or image would enhance your response. If so, use the appropriate tool to find relevant media.
 
@@ -103,3 +105,12 @@ def search_images(query: str) -> str:
             print(f"Error downloading image: {e}")
             return None
         
+        
+def convert_unit(ingredient: str, quantity: float, original_unit: str, target_unit: str) -> str:
+    """Converts a quantity from one unit to another"""
+    print(f"Converting {quantity} {original_unit} to {target_unit} for {ingredient}")
+    ureg = pint.UnitRegistry()
+    original_quantity = ureg.Quantity(quantity, original_unit)
+    converted_quantity = original_quantity.to(target_unit)
+
+    return f"The converted amount for {ingredient} is {converted_quantity.magnitude:.2f} {converted_quantity.units}."
