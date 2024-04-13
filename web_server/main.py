@@ -39,9 +39,11 @@ class CosmoCook:
         cached_data = redis_client.get(cache_key)
         self.start_chat()
         if cached_data:
+            print('Cache hit, returning cached recipe')
             return cached_data.decode('utf-8')
         else:
             recipe = get_recipe_from_search(search, self.chat, redis_client)
+            print('Recipe fetched from search')
             self.recipe = recipe
             redis_client.set(cache_key, recipe)
             return recipe
@@ -50,9 +52,11 @@ class CosmoCook:
         cache_key = f"question:{self.recipe['recipe_name']}:{question}"
         cached_data = redis_client.get(cache_key)
         if cached_data:
+            print('Cache hit, returning cached question')
             return cached_data.decode('utf-8')
         else:
             response = get_question_response(self.recipe, question, self.chat)
+            print('Response received')
             self.question = response
             redis_client.set(cache_key, response)
             return response
@@ -91,10 +95,12 @@ async def handle_message(websocket, path):
             continue
 
         if data['type'] == 'ASK_QUESTION':
+            print('Received ASK_QUESTION request')
             question = data['data']['question']
             response = cosmo_cook.ask_question(question)
             await websocket.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
         elif data['type'] == 'GET_RECIPE':
+            print('Received GET_RECIPE request')
             search = data['data']['search']
             recipe = cosmo_cook.get_recipe(search)
             await websocket.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))

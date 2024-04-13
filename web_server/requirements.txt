@@ -59,6 +59,7 @@ trio-websocket==0.11.1
 typing_extensions==4.11.0
 uritemplate==4.1.1
 urllib3==2.2.1
+websockets==12.0
 Werkzeug==2.1.2
 wsproto==1.2.0
 zope.event==5.0
