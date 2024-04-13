@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Popup;
 
 
 public class MainScreen_ShowData_Event
@@ -33,3 +34,14 @@ public class LoadingFinished_Event
     }
 }
 
+
+public class CreatePopup_Event
+{
+    public PopupData popupData;
+
+    public CreatePopup_Event(PopupData popupData_f)
+    {
+        popupData = popupData_f;
+        Debug.Log("CreatePopup_Event");
+    }
+}
