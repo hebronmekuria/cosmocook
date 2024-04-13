@@ -102,7 +102,7 @@ def get_recipe_from_search(query, chat):
     first_url = get_first_google_url(query)
     # print(first_url)
     file_url = first_url.replace("https://", "").replace("http://", "").replace("/", "_")
-    file = os.path.join("data", file_url)
+    file = os.path.join("google_api/data", file_url)
     if os.path.exists(file):
         with open(file, 'r') as f:
             return f.read()

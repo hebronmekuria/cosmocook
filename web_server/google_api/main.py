@@ -2,10 +2,10 @@ from search import get_recipe_from_search
 from question import get_question_response
 from image_request import get_first_image_base64
 import google.generativeai as genai
-from secret_data import google_api_key
+from dotenv import load_dotenv
+load_dotenv()
 
-
-genai.configure(api_key=google_api_key)
+genai.configure(api_key=os.getenv('GENAI_API_KEY'))
 model = genai.GenerativeModel('gemini-pro')
 chat = model.start_chat()
 

@@ -7,6 +7,8 @@
 /__pycache__
 /web_server/__pycache__
 
+.env
+
 /ar-unity/[Ll]ibrary/
 /ar-unity/[Tt]emp/
 /ar-unity/[Oo]bj/
