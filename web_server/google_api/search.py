@@ -102,7 +102,7 @@ def get_text_from_url(url):
 def get_recipe_from_search(query, chat, redis_client):
     print('Fetching recipe from search:', query)
     first_url = get_first_google_url(query)
-    cache_key = f"recipe:{query}"
+    cache_key = f"recipe_search:{first_url}"
     
     # Check if the recipe is already cached in redis
     cached_data = redis_client.get(cache_key)
@@ -116,7 +116,7 @@ def get_recipe_from_search(query, chat, redis_client):
         print("Error fetching text from URL")
 
     print('Sending raw recipe text and schema to Gemini')
-    response = chat.send_message("You are a professional chef, that can expertly create recipes. You will be given recipe that is scraped from the internet, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
+    response = chat.send_message("You are a professional chef, that can expertly create recipes. You must create a recipe for the following food: {query}. The recipe is scraped from the internet, please make sure to focus on the MAIN ingredient of the page and do not get distracted, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
     redis_client.set(cache_key, f"{response.text}")
 
     return response.text

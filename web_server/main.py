@@ -18,8 +18,7 @@ load_dotenv()
 GET_STREAM = False
 app = Flask(__name__)
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST'), port=19005, username='default', password=os.getenv('REDIS_PASSWORD'), db=0)
-genai.configure(api_key=os.getenv('GENAI_API_KEY'))
-model = genai.GenerativeModel('gemini-pro')
+
 
 class CosmoCook:
     def __init__(self):
@@ -62,6 +61,22 @@ class CosmoCook:
             return response
 
     def start_chat(self):
+        print('Starting a new chat session')
+        keys = json.loads(os.getenv("GOOGLE_API_KEYS"))
+        last_key_used = 0
+        try:
+            last_key_used = int(redis_client.get('last_key_used'))
+            api_key = keys[last_key_used % len(keys)]
+            print(f'Rotating to key {last_key_used % len(keys)}')
+        except:
+            print('last_key_used not found, using first key')
+            api_key = keys[0]
+            
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-pro')
+        
+        redis_client.set('last_key_used', last_key_used + 1)
+        
         self.chat = model.start_chat()
         return self.chat
 
@@ -89,6 +104,7 @@ async def handle_message(websocket, path):
 
         try:
             data = json.loads(message)
+            print('Received:', data)
         except ValueError:
             print("Invalid JSON")
             await websocket.send(json.dumps({'type': 'ERROR', 'data': 'Invalid JSON'}))
@@ -101,7 +117,7 @@ async def handle_message(websocket, path):
             await websocket.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
         elif data['type'] == 'GET_RECIPE':
             print('Received GET_RECIPE request')
-            search = data['data']['search']
+            search = data['data']['query']
             recipe = cosmo_cook.get_recipe(search)
             await websocket.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))
 
