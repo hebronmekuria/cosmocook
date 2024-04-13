@@ -107,14 +107,14 @@ def get_text_from_url(url):
         print("Error fetching URL:", e)
         return None
 
-def get_recipe_from_search(query, chat, redis_client):
+def get_recipe_from_search(query, chat, redis_client, no_cache = False):
     print('Fetching recipe from search:', query)
     first_url = get_first_google_url(query)
     cache_key = f"recipe_search:{first_url}"
     
     # Check if the recipe is already cached in redis
     cached_data = redis_client.get(cache_key)
-    if cached_data:
+    if cached_data and not no_cache:
         print('Cache hit, returning cached data')
         return cached_data.decode('utf-8')
     
