@@ -1,7 +1,7 @@
 import google.generativeai as genai
+import os
 
-
-GOOGLE_API_KEY="AIzaSyD2uJRKkpnRj6j89qQGB2gz6Hrk3xbASTI"
+GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
 video_file_name = "./snips/test0.mp4"

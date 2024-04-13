@@ -5,6 +5,8 @@ from requests.auth import HTTPBasicAuth
 import threading
 import os
 import time 
+from dotenv import load_dotenv
+load_dotenv()
 
 # Suppress ugly ssl error
 import urllib3
@@ -12,9 +14,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 # Disable urllib3 warnings globally
 urllib3.disable_warnings(InsecureRequestWarning)
 
-hololens_ip = "35.2.22.165"
-username = "nyap"
-password = ""
+hololens_ip = os.getenv('HOLOLENS_IP')
+username = os.getenv('HOLOLENS_USERNAME')
+password = os.getenv("HOLOLENS_PASSWORD")
 live_stream_endpoint = f'http://{username}:{password}@{hololens_ip}/api/holographic/stream/live_high.mp4?holo=false&pv=true&loopback=true'
 snip_buffer = 3
 

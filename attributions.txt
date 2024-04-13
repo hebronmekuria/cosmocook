@@ -4,5 +4,6 @@ https://fonts.google.com/specimen/Poppins
 https://freesound.org/people/tombola/sounds/49202/
 "Avocado" (https://skfb.ly/o6MNX) by Thomas R is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 "Tonko" (https://skfb.ly/oo8IM) by samir.kazah is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+<a href="https://www.flaticon.com/free-icons/tick" title="tick icons">Tick icons created by Maxim Basinski Premium - Flaticon</a>
 
 Server:
