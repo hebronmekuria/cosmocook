@@ -2,7 +2,6 @@ from googlesearch import search
 import requests
 from bs4 import BeautifulSoup
 import google.generativeai as genai
-from secret_data import google_api_key
 import os
 
 schema = """
@@ -99,11 +98,11 @@ def get_text_from_url(url):
         print("Error fetching URL:", e)
         return None
 
-def get_recipe_from_search(query):
+def get_recipe_from_search(query, chat):
     first_url = get_first_google_url(query)
     # print(first_url)
     file_url = first_url.replace("https://", "").replace("http://", "").replace("/", "_")
-    file = os.path.join("data", file_url)
+    file = os.path.join("google_api/data", file_url)
     if os.path.exists(file):
         with open(file, 'r') as f:
             return f.read()
@@ -112,9 +111,7 @@ def get_recipe_from_search(query):
     # print(text)
     if text is None:
         print("Error fetching text from URL")
-    genai.configure(api_key=google_api_key)
-    model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content("You are a professional chef, that can expertly create recipes. You will be given recipe that is scraped from the internet, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
+    response = chat.send_message("You are a professional chef, that can expertly create recipes. You will be given recipe that is scraped from the internet, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
     with open(file, 'w+') as f:
         f.write(response.text)
     return response.text

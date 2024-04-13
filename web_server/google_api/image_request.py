@@ -1,10 +1,9 @@
 import requests
-from secret_data import google_custom_search_key
 import base64
 import os
 
 # Your API key and Custom Search Engine ID
-API_KEY = google_custom_search_key
+API_KEY = os.getenv('GOOGLE_CUSTOM_SEARCH_KEY')
 CSE_ID = "1679c5a234c424bfc"
 
 def get_first_image_url(query):
