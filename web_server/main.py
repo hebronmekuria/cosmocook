@@ -130,6 +130,11 @@ class CosmoCook:
             self.question = response
             redis_client.set(cache_key, response)
             return response
+        
+    def ask_question_on_video(self, question):
+        prompt = f"You are a professional chef, in the provided video a student of your does a cooking procedure and asks the following question: {question}. Respond with a concise string with you response to their question based off the video provided."
+        res = prompt_with_latest_image(prompt, full_video=True)
+        return res
 
     @staticmethod
     def tool_config_from_mode(mode: str, fns: Iterable[str] = ()):
@@ -183,6 +188,11 @@ def ask_question():
     question = request.args.get('question')
     no_cache = request.args.get('no_cache') == 'true'
     return cosmo_cook.ask_question(question, no_cache)
+
+@app.route('/api/ask_question_on_video')
+def ask_question_on_video():
+    question = request.args.get('question')    
+    return cosmo_cook.ask_question_on_video(question)
 
 async def handle_message(websocket, path):
     async for message in websocket:
