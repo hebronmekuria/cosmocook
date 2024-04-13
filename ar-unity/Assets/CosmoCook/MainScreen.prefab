@@ -319,6 +319,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Next
       objectReference: {fileID: 0}
+    - target: {fileID: 7772507345199977791, guid: 2a60c3891bd31cb45b22e2171f57ae48, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772507345199977791, guid: 2a60c3891bd31cb45b22e2171f57ae48, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 775818920723650729}
+    - target: {fileID: 7772507345199977791, guid: 2a60c3891bd31cb45b22e2171f57ae48, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnNextButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772507345199977791, guid: 2a60c3891bd31cb45b22e2171f57ae48, type: 3}
+      propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MainScreen, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1086114703496459660, guid: 2a60c3891bd31cb45b22e2171f57ae48, type: 3}
@@ -439,15 +455,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalPosition.x

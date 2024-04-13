@@ -7,12 +7,6 @@ using WebSocketSharp;
 
 public class Popup : MonoBehaviour
 {
-    public class PopupData
-    {
-        public string text;
-        public string image;
-    }
-
     public float lineHeight;
     public float imageHeight;
     public AudioClip Clip;

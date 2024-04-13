@@ -17,32 +17,36 @@ public class WebsocketDataHandler : MonoBehaviour
         wsClient = GetComponent<WebSocketClient>();
     }
 
-    public void HandleRecipeData(RecipeData data)
+
+    public void RecvResponse_Recipe(RecipeData data)
     {
+        Debug.Log(data.recipe_name);
         EventBus.Publish<RecipeDataReceived_Event>(new(data));
     }
 
-    // Public functions for to call to send data
-    public void SendInitialData(string color, string name)
+    public void RecvResponse_Popup(PopupData data)
     {
-        InitialData emptyInitials = new InitialData();
-        emptyInitials.color = color;
-        emptyInitials.name = name;
-        Debug.Log("TODO not impl");
-        // if (debugMode) Debug.Log("(GET) WebsocketDataHandler.cs: Sending INITIAL data");
-        // 
-        // // Create a new CombinedData instance
-        // InitialData combinedData = new InitialData
-        // {
-        //     type = "Initial",
-        //     use = "PUT",
-        //     color = data.color,
-        //     name = data.name
-        // };
-        // 
-        // // Convert the combined data to JSON format and send to WebSocket client
-        // string jsonData = JsonUtility.ToJson(combinedData);
-        // 
-        // wsClient.SendJsonData(jsonData);
+        Debug.Log(data.text);
+        EventBus.Publish<CreatePopup_Event>(new(data));
+    }
+
+    public void SendRequest_GetRecipe(string query)
+    {
+        Request_GetRecipe request = new();
+        request.type = "GET_RECIPE";
+        request.data = new(query);
+
+        Debug.Log("(Send) Sending INITIAL data");
+        
+        // Convert the combined data to JSON format and send to WebSocket client
+        string jsonData = JsonUtility.ToJson(request);
+        
+        wsClient.SendJsonData(jsonData);
+    }
+
+    [ContextMenu("func Debug")]
+    public void Debugthis()
+    {
+        SendRequest_GetRecipe("greek salad");
     }
 }

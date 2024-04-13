@@ -94,7 +94,7 @@ public class MainScreen : MonoBehaviour
 
         IEnumerator _SetBackplate()
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.07f);
             SetBackplateSize();
         }
 
@@ -138,6 +138,6 @@ public class MainScreen : MonoBehaviour
     [ContextMenu("func NextButtonPressed")]
     public void OnNextButtonPressed()
     {
-        // TODO tell server
+        GameManager.GoToNextStep();
     }
 }
