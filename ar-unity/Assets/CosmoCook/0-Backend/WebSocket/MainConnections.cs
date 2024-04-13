@@ -9,7 +9,6 @@ public class MainConnections : MonoBehaviour
     
     private bool websocketConnected;
 
-    // Start is called before the first frame update
     void Start()
     {
         websocketConnected = false;
