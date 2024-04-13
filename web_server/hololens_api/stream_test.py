@@ -14,7 +14,7 @@ urllib3.disable_warnings(InsecureRequestWarning)
 
 hololens_ip = "35.2.22.165"
 username = "nyap"
-password = "10Chickens"
+password = ""
 live_stream_endpoint = f'http://{username}:{password}@{hololens_ip}/api/holographic/stream/live_high.mp4?holo=false&pv=true&loopback=true'
 snip_buffer = 3
 
