@@ -12,6 +12,9 @@ import os
 import threading
 import socket
 import multiprocessing
+from PIL import Image
+import requests
+import base64
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -44,8 +47,59 @@ class CosmoCook:
             recipe = get_recipe_from_search(search, self.chat, redis_client)
             print('Recipe fetched from search')
             self.recipe = recipe
-            redis_client.set(cache_key, recipe)
+            recipe = recipe.replace('\n', ' ')
+            recipe = recipe.replace('\"', '"')
+
+            print('Replaced newlines with spaces, parsing JSON')
+
+            try:
+                recipe = json.loads(recipe)
+            except:
+                print('Error parsing JSON, returning raw recipe')
+                return recipe
+            recipe = self.download_images(recipe)
+            redis_client.set(cache_key, json.dumps(recipe))
+            
             return recipe
+
+    def download_images(self, recipe):
+        image_count = 0
+        for step in recipe["steps"]:
+            if step["image_url"]:
+                image_count += 1
+
+        print(f"Downloading {image_count} images")
+
+        for step in recipe["steps"]:
+            if "image_url" not in step:
+                step["image_url"] = None
+            elif step["image_url"]:
+                cache_key = f"image:{step['image_url']}"
+                cached_data = redis_client.get(cache_key)
+
+                if cached_data:
+                    print('Cache hit, returning cached image')
+                    step["image_url"] = cached_data.decode('utf-8')
+                else:
+                    try:
+                        response = requests.get(step["image_url"], stream=True)
+                        img = Image.open(response.raw)
+                        img.save('temp_image.jpg')
+
+                        with open('temp_image.jpg', 'rb') as image_file:
+                            image_data = base64.b64encode(image_file.read()).decode('utf-8')
+                            step["image_url"] = image_data
+                            redis_client.set(cache_key, image_data)
+
+                    except Exception as e:
+                        print(f"Error downloading image: {e}")
+                        step["image_url"] = None
+
+                    os.remove('temp_image.jpg')
+
+        print('Images downloaded')
+        
+        return recipe
 
     def ask_question(self, question):
         cache_key = f"question:{self.recipe['recipe_name']}:{question}"
