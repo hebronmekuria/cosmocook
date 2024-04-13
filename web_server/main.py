@@ -116,6 +116,7 @@ class CosmoCook:
 
     def start_chat(self):
         print('Starting a new chat session')
+        print(os.getenv("GOOGLE_API_KEYS"))
         keys = json.loads(os.getenv("GOOGLE_API_KEYS"))
         last_key_used = 0
         try:
