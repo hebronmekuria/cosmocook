@@ -6,6 +6,7 @@
 /web_server/env
 /__pycache__
 /web_server/__pycache__
+data/
 
 .env
 
