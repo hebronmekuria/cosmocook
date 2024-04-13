@@ -1,0 +1,94 @@
+{
+    "id": 1, 
+    "type": "TaskList",
+    "use": "PUT",
+    "data": {
+        "AllTasks": [
+            {
+                "task_id": 2, 
+                "status": 1,  // 0 for Upcoming, 1 for InProgress, 2 for Completed
+                "title": "Task Name",
+                "isEmergency":  0, //0 for not Emergency, 1 for Emergency
+                "astronauts": [ // list of ALL astronauts involved (including self)
+                    {
+                        "astronaut_id": 1,
+                        "ready": true
+                    },
+                    {
+                        "astronaut_id": 2,
+                        "ready": true
+                    },
+                    {
+                        "astronaut_id": 3,
+                        "ready": false
+                    }
+                ], 
+                "subtasks": [
+                    {
+                        "subtask_id": 1, // subtask id's are local to each task 
+                        "status": 1,  
+                        "title": "Subtask Name",
+                        "description": "This is a subtask",
+                        "subtask_astronauts": [ 1,2 ]
+                    },
+                    {
+                        "subtask_id": 3,
+                        "status": 0,
+                        "title": "Subtask Name",
+                        "description": "This is a subtask",
+                        "subtask_astronauts": [ 2 ]
+                    },
+                    {
+                        "subtask_id": 2,
+                        "status": 0,
+                        "title": "Subtask Name",
+                        "description": "This is a subtask",
+                        "subtask_astronauts": [ 1, 3 ]
+                    }
+                ]
+            },
+            {
+                "task_id": 3,
+                "status": 1,
+                "title": "Task Name",
+                "isEmergency": 1,
+                "astronauts": [
+                    {
+                        "astronaut_id": 1,
+                        "ready": true
+                    }
+                ],
+                "subtasks": [
+                    {
+                        "subtask_id": 1,
+                        "status": 1,
+                        "title": "Subtask Name",
+                        "description": "This is a subtask",
+                        "subtask_astronauts": [ 1 ]
+                    }
+                ]
+            },
+            {
+                "task_id": 1,
+                "status": 1,
+                "title": "Task Name",
+                "isEmergency": 0,
+                "astronauts": [
+                    {
+                        "astronaut_id": 1,
+                        "ready": true
+                    }
+                ],
+                "subtasks": [
+                    {
+                        "subtask_id": 1,
+                        "status": 1,
+                        "title": "Subtask Name",
+                        "description": "This is a subtask",
+                        "subtask_astronauts": [ 1 ]
+                    }
+                ]
+            }
+        ]
+    }
+}
