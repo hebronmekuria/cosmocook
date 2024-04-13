@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import google.generativeai as genai
 import os
 import json
+from urllib.parse import urlparse
 
 schema = """
             {
@@ -76,8 +77,12 @@ schema = """
 def get_first_google_url(query):
     try:
         search_results = search(query)
-        first_url = next(search_results)
-        return first_url
+        banned_domains = ['reddit.com', 'quora.com', 'youtube.com']
+        while True:
+            url = next(search_results)
+            print(url)
+            if not any(domain in urlparse(url).netloc for domain in banned_domains):
+                return url
     except StopIteration:
         return None
     
@@ -117,7 +122,7 @@ def get_recipe_from_search(query, chat, redis_client):
     text = get_text_from_url(first_url)
     if text is None:
         print("Error fetching text from URL")
-    print(text)
+    # print(text)
 
     print('Sending raw recipe text and schema to Gemini')
     response = chat.send_message("You are a professional chef, that can expertly create recipes. You must create a recipe for the following food: {query}. The recipe is scraped from the internet, please make sure to focus on the MAIN ingredient of the page and do not get distracted, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
