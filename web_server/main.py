@@ -35,16 +35,16 @@ class CosmoCook:
         self.image = {}
         self.chat = None
 
-    def get_recipe(self, search):
+    def get_recipe(self, search, no_cache = False):
         search += ' recipe'
         cache_key = f"recipe:{search}"
         cached_data = redis_client.get(cache_key)
         self.start_chat()
-        if cached_data:
+        if cached_data and not no_cache:
             print('Cache hit, returning cached recipe')
             return cached_data.decode('utf-8')
         else:
-            recipe = get_recipe_from_search(search, self.chat, redis_client)
+            recipe = get_recipe_from_search(search, self.chat, redis_client, no_cache)
             print('Recipe fetched from search')
             self.recipe = recipe
             recipe = recipe.replace('\n', ' ')
@@ -57,12 +57,12 @@ class CosmoCook:
             except:
                 print('Error parsing JSON, returning raw recipe')
                 return recipe
-            recipe = self.download_images(recipe)
+            recipe = self.download_images(recipe, no_cache)
             redis_client.set(cache_key, json.dumps(recipe))
             
             return recipe
 
-    def download_images(self, recipe):
+    def download_images(self, recipe, no_cache = False):
         image_count = 0
         for step in recipe["steps"]:
             if step["image_url"]:
@@ -77,7 +77,7 @@ class CosmoCook:
                 cache_key = f"image:{step['image_url']}"
                 cached_data = redis_client.get(cache_key)
 
-                if cached_data:
+                if cached_data and not no_cache:
                     print('Cache hit, returning cached image')
                     step["image_url"] = cached_data.decode('utf-8')
                 else:
@@ -101,10 +101,10 @@ class CosmoCook:
         
         return recipe
 
-    def ask_question(self, question):
+    def ask_question(self, question, no_cache = False):
         cache_key = f"question:{self.recipe['recipe_name']}:{question}"
         cached_data = redis_client.get(cache_key)
-        if cached_data:
+        if cached_data and not no_cache:
             print('Cache hit, returning cached question')
             return cached_data.decode('utf-8')
         else:
@@ -116,6 +116,7 @@ class CosmoCook:
 
     def start_chat(self):
         print('Starting a new chat session')
+        print(os.getenv("GOOGLE_API_KEYS"))
         keys = json.loads(os.getenv("GOOGLE_API_KEYS"))
         last_key_used = 0
         try:
@@ -143,12 +144,22 @@ def index():
 @app.route('/api/get_recipe')
 def get_recipe():
     search = request.args.get('search')
-    return cosmo_cook.get_recipe(search)
+    no_cache = request.args.get('no_cache')
+    if no_cache == 'true':
+        no_cache = True
+    else:
+        no_cache = False
+    return cosmo_cook.get_recipe(search, no_cache)
 
 @app.route('/api/ask_question')
 def ask_question():
     question = request.args.get('question')
-    return cosmo_cook.ask_question(question)
+    no_cache = request.args.get('no_cache')
+    if no_cache == 'true':
+        no_cache = True
+    else:
+        no_cache = False
+    return cosmo_cook.ask_question(question, no_cache)
 
 async def handle_message(websocket, path):
     async for message in websocket:

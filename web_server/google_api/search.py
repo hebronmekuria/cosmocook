@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import google.generativeai as genai
 import os
 import json
+from urllib.parse import urlparse
 
 schema = """
             {
@@ -76,14 +77,21 @@ schema = """
 def get_first_google_url(query):
     try:
         search_results = search(query)
-        first_url = next(search_results)
-        return first_url
+        banned_domains = ['reddit.com', 'quora.com', 'youtube.com']
+        while True:
+            url = next(search_results)
+            print(url)
+            if not any(domain in urlparse(url).netloc for domain in banned_domains):
+                return url
     except StopIteration:
         return None
     
 def get_text_from_url(url):
     try:
-        response = requests.get(url, allow_redirects=True, timeout=2)
+        headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers, allow_redirects=True, timeout=2)
         soup = BeautifulSoup(response.content, 'html.parser')
 
         # Replace <img> tags with their src attribute in the text
@@ -99,14 +107,14 @@ def get_text_from_url(url):
         print("Error fetching URL:", e)
         return None
 
-def get_recipe_from_search(query, chat, redis_client):
+def get_recipe_from_search(query, chat, redis_client, no_cache = False):
     print('Fetching recipe from search:', query)
     first_url = get_first_google_url(query)
     cache_key = f"recipe_search:{first_url}"
     
     # Check if the recipe is already cached in redis
     cached_data = redis_client.get(cache_key)
-    if cached_data:
+    if cached_data and not no_cache:
         print('Cache hit, returning cached data')
         return cached_data.decode('utf-8')
     
@@ -114,6 +122,7 @@ def get_recipe_from_search(query, chat, redis_client):
     text = get_text_from_url(first_url)
     if text is None:
         print("Error fetching text from URL")
+    # print(text)
 
     print('Sending raw recipe text and schema to Gemini')
     response = chat.send_message("You are a professional chef, that can expertly create recipes. You must create a recipe for the following food: {query}. The recipe is scraped from the internet, please make sure to focus on the MAIN ingredient of the page and do not get distracted, and your job is to create a json recipe using the following schema. \n\n" + schema + "\n\n" + text)
