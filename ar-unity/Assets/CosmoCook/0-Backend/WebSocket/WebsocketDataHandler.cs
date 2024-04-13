@@ -30,6 +30,12 @@ public class WebsocketDataHandler : MonoBehaviour
         EventBus.Publish<CreatePopup_Event>(new(data));
     }
 
+    public void RecvResponse_Ingredient(string data)
+    {
+        Debug.Log(data);
+        EventBus.Publish<IngredientFound_Event>(new(data));
+    }
+
     public void SendRequest_GetRecipe(string query)
     {
         Request_GetRecipe request = new();

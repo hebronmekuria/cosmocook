@@ -135,7 +135,7 @@ public class WebSocketClient : MonoBehaviour
                 break;
             case "INGREDIENT_RESPONSE":
                 IngredientMessage json2 = JsonUtility.FromJson<IngredientMessage>(jsonData);
-                dataHandler.RecvResponse_Popup(json2.data);
+                dataHandler.RecvResponse_Ingredient(json2.data);
                 break;
             default:
                 Debug.LogWarning("Unknown message type: " + messageType);
