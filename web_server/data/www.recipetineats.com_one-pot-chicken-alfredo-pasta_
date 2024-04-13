@@ -1,0 +1,107 @@
+{
+ "recipe_name": "One Pot Chicken Alfredo Pasta",
+ "description": "This is not meant to be an authentic Italian pasta. It’s a quick mid-week meal that you can get on the table in just over 15 minutes and is stellar for effort vs output.",
+ "prep_time_minutes": 2,
+ "cook_time_minutes": 13,
+ "total_time_minutes": 15,
+ "ingredients": [
+  {
+   "name": "chicken breast",
+   "quantity": "200 g",
+   "unit": "g"
+  },
+  {
+   "name": "Salt",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Pepper",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "olive oil",
+   "quantity": "1 tbsp",
+   "unit": "tbsp"
+  },
+  {
+   "name": "fettuccine",
+   "quantity": "250 g",
+   "unit": "g"
+  },
+  {
+   "name": "milk",
+   "quantity": "2 cups",
+   "unit": "cups"
+  },
+  {
+   "name": "chicken stock / broth",
+   "quantity": "1 1/2 cups",
+   "unit": "cups"
+  },
+  {
+   "name": "garlic clove",
+   "quantity": "1 large",
+   "unit": null
+  },
+  {
+   "name": "heavy cream",
+   "quantity": "1/2 cup",
+   "unit": null
+  },
+  {
+   "name": "parmesan",
+   "quantity": "3/4 cup",
+   "unit": null
+  },
+  {
+   "name": "Parsley",
+   "quantity": null,
+   "unit": null
+  }
+ ],
+ "steps": [
+  {
+   "step_number": 1,
+   "description": "Sprinkle both sides of the chicken with salt and pepper.",
+   "image_url": null
+  },
+  {
+   "step_number": 2,
+   "description": "Use a skillet large enough to fit the pasta.",
+   "image_url": null
+  },
+  {
+   "step_number": 3,
+   "description": "Heat oil over medium high heat. Add chicken and cook for 2 minutes on each side until golden and cooked through. Remove onto plate and rest for 5 minutes, then slice while pasta is cooking.",
+   "image_url": null
+  },
+  {
+   "step_number": 4,
+   "description": "Add milk, chicken broth and garlic. Bring to simmer then add pasta.",
+   "image_url": null
+  },
+  {
+   "step_number": 5,
+   "description": "Move pasta around every 30 seconds or so until it is softened (around 3 minutes) so it doesn't stick. Once pasta is softened, reduce heat to medium and stir every couple of minutes.",
+   "image_url": null
+  },
+  {
+   "step_number": 6,
+   "description": "At about 9 - 10 minutes, the pasta should be almost cooked but there should still be liquid covering the base of the skillet. Add cream and parmesan and mix. Simmer, stirring occasionally, for ~2 minutes, until sauce is thickened and pasta is cooked.",
+   "image_url": null
+  },
+  {
+   "step_number": 7,
+   "description": "If you cook it too long and the sauce goes gluggy, add a splash of hot tap water - will go back to silky with a few tosses.",
+   "image_url": null
+  },
+  {
+   "step_number": 8,
+   "description": "Adjust salt and pepper to taste and serve immediately, garnished with freshly grated parmesan and parsley!",
+   "image_url": null
+  }
+ ],
+ "servings": 3
+}
