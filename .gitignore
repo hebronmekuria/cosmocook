@@ -2,6 +2,9 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+/env
+/web_server/env
+
 /ar-unity/[Ll]ibrary/
 /ar-unity/[Tt]emp/
 /ar-unity/[Oo]bj/
