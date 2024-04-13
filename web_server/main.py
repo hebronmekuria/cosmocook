@@ -67,6 +67,8 @@ class CosmoCook:
             return recipe
 
     def get_ingredient(self):
+        if not self.recipe:
+            return {'error': 'No recipe found'}
         ingredients = [x.get('name', "N/A").lower() for x in self.recipe.get('ingredients', {})]
         print("Ingredients:", ingredients)
         
@@ -113,6 +115,9 @@ class CosmoCook:
         return recipe
 
     def ask_question(self, question, no_cache=False):
+        if not self.recipe:
+            return {'error': 'No recipe found'}
+        
         cache_key = f"question:{self.recipe['recipe_name']}:{question}"
         cached_data = redis_client.get(cache_key)
         
@@ -195,7 +200,7 @@ async def handle_message(websocket, path):
 
         if data['type'] == 'ASK_QUESTION':
             print('Received ASK_QUESTION request')
-            question = data['data']['question']
+            question = data['data']['query']
             response = cosmo_cook.ask_question(question)
             await websocket.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
         elif data['type'] == 'GET_RECIPE':
