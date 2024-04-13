@@ -1,5 +1,7 @@
 from flask import Flask, request
-from flask_socketio import SocketIO, emit
+import asyncio
+import websockets
+import json
 from google_api.search import get_recipe_from_search
 from google_api.question import get_question_response
 from hololens_api.stream import main_stream
@@ -9,41 +11,33 @@ import redis
 import os
 import threading
 import socket
-import json
+import multiprocessing
 
 from dotenv import load_dotenv
 load_dotenv()
-
 GET_STREAM = False
-
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins='*')
 redis_client = redis.Redis(host=os.getenv('REDIS_HOST'), port=19005, username='default', password=os.getenv('REDIS_PASSWORD'), db=0)
-
 genai.configure(api_key=os.getenv('GENAI_API_KEY'))
 model = genai.GenerativeModel('gemini-pro')
 
 class CosmoCook:
-    def __init__(self, app):
+    def __init__(self):
         if GET_STREAM:
             self.stream = threading.Thread(target=main_stream)
             self.stream.start()
         else:
             self.stream = None
-        self.app = app
         self.recipe = {}
         self.question = {}
         self.image = {}
         self.chat = None
 
     def get_recipe(self, search):
-        search += ' recipe'  # add 'recipe' to the search query to get more accurate results
+        search += ' recipe'
         cache_key = f"recipe:{search}"
         cached_data = redis_client.get(cache_key)
-        
-        # Start a new chat session
         self.start_chat()
-        
         if cached_data:
             return cached_data.decode('utf-8')
         else:
@@ -55,7 +49,6 @@ class CosmoCook:
     def ask_question(self, question):
         cache_key = f"question:{self.recipe['recipe_name']}:{question}"
         cached_data = redis_client.get(cache_key)
-        
         if cached_data:
             return cached_data.decode('utf-8')
         else:
@@ -68,7 +61,7 @@ class CosmoCook:
         self.chat = model.start_chat()
         return self.chat
 
-cosmo_cook = CosmoCook(app)
+cosmo_cook = CosmoCook()
 
 @app.route('/')
 def index():
@@ -84,21 +77,56 @@ def ask_question():
     question = request.args.get('question')
     return cosmo_cook.ask_question(question)
 
-@socketio.on('message')
-def handle_message(message):
-    data = json.loads(message)
-    if data['type'] == 'ASK_QUESTION':
-        question = data['data']['question']
-        response = cosmo_cook.ask_question(question)
-        socketio.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
-    elif data['type'] == 'GET_RECIPE':
-        search = data['data']['search']
-        recipe = cosmo_cook.get_recipe(search)
-        socketio.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))
-    
-if __name__ == '__main__':
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-    print(f"WebSocket URL: ws://{ip_address}:5000")
-    
-    socketio.run(app, host='0.0.0.0', debug=True)
+async def handle_message(websocket, path):
+    async for message in websocket:
+        if (message == 'ping'):
+            await websocket.send('pong')
+            continue
+
+        try:
+            data = json.loads(message)
+        except ValueError:
+            print("Invalid JSON")
+            await websocket.send(json.dumps({'type': 'ERROR', 'data': 'Invalid JSON'}))
+            continue
+
+        if data['type'] == 'ASK_QUESTION':
+            question = data['data']['question']
+            response = cosmo_cook.ask_question(question)
+            await websocket.send(json.dumps({'type': 'QUESTION_RESPONSE', 'data': response}))
+        elif data['type'] == 'GET_RECIPE':
+            search = data['data']['search']
+            recipe = cosmo_cook.get_recipe(search)
+            await websocket.send(json.dumps({'type': 'RECIPE_RESPONSE', 'data': recipe}))
+
+def get_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+    except Exception:
+        ip = "127.0.0.1"
+    return ip
+
+class FlaskAppProcess(multiprocessing.Process):
+    def run(self):
+        print(f"Server started on http://localhost:8000")
+        app.run(host='0.0.0.0', port=8000, debug=True, use_reloader=False)
+
+class WebSocketServerProcess(multiprocessing.Process):
+    def run(self):
+        start_server = websockets.serve(handle_message, "0.0.0.0", 8001)
+        print(f"Websocket server started on ws://{get_ip()}:8001")
+        asyncio.get_event_loop().run_until_complete(start_server)
+        asyncio.get_event_loop().run_forever()
+
+if __name__ == "__main__":
+    flask_process = FlaskAppProcess()
+    ws_process = WebSocketServerProcess()
+
+    flask_process.start()
+    ws_process.start()
+
+    flask_process.join()
+    ws_process.join()
