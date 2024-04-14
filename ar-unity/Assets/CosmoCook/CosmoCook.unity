@@ -1562,6 +1562,7 @@ MonoBehaviour:
   HomeScreen: {fileID: 530000957}
   MainScreen: {fileID: 8462204002270108343, guid: a94de1729d7fb94458302f9f7bd65cf9, type: 3}
   IngredientScreen: {fileID: 8462204002270108343, guid: 3d9f8c08cac54b346b33ae0d2a22174d, type: 3}
+  IngredientsInstance: {fileID: 0}
   SpeechToText: {fileID: 274413835}
 --- !u!114 &8398407115219728469
 MonoBehaviour:
@@ -1601,6 +1602,22 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - keyword: Go to the next step
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8398407115219728468}
+          m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+          m_MethodName: GoToNextStep
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
