@@ -115,10 +115,10 @@ class CosmoCook:
         return recipe
 
     def ask_question(self, question, no_cache=False):
-        if not self.recipe:
-            return {'error': 'No recipe found'}
+        if not self.chat:
+            self.start_chat()
         
-        cache_key = f"question:{self.recipe['recipe_name']}:{question}"
+        cache_key = f"question:{self.recipe.get('recipe_name', {})}:{question}"
         cached_data = redis_client.get(cache_key)
         
         if cached_data and not no_cache:
@@ -126,9 +126,9 @@ class CosmoCook:
             return json.loads(cached_data.decode('utf-8'))
         else:
             response = get_question_response(self.recipe, question, self.chat, redis_client)
-            print('Response received')
-            self.question = response
             redis_client.set(cache_key, response)
+            response = json.loads(response)
+            self.question = response
             return response
         
     def ask_question_on_video(self, question):
