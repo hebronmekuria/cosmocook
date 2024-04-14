@@ -17,13 +17,13 @@ public class CharacterManager : MonoBehaviour
 
         EventBus.Subscribe<LoadingStarted_Event>(e =>
         {
-            SetActiveStates();
             isLoading = true;
+            SetActiveStates();
         });
         EventBus.Subscribe<LoadingFinished_Event>(e =>
         {
-            SetActiveStates();
             isLoading = false;
+            SetActiveStates();
         });
     }
 

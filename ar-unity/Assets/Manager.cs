@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Device;
 
-public class GameManager : MonoBehaviour
+public class Manager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static Manager Instance;
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -18,43 +18,43 @@ public class GameManager : MonoBehaviour
 
     public static RecipeData Recipe = null;
     public static int CurrentIndex = 0;
+    public GameObject HomeScreen;
     public GameObject MainScreen;
     public GameObject IngredientScreen;
 
+    public GameObject IngredientsInstance;
+    public GameObject SpeechToText;
+
     private void Start()
     {
-        SpawnScreen(0.2f, MainScreen);
         EventBus.Subscribe<RecipeDataReceived_Event>(RecipeDataReceived);
-    }
 
-    public GameObject SpawnScreen(float delay, GameObject screenPrefab)
-    {
         IEnumerator _SpawnScreen(float delay, GameObject screen)
         {
             yield return new WaitForSeconds(delay);
             screen.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
             screen.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f;
         }
 
-        GameObject g = Instantiate(screenPrefab);
-        g.SetActive(false);
+        HomeScreen.SetActive(false);
 
-        StartCoroutine(_SpawnScreen(delay, g));
-
-        return g;
+        StartCoroutine(_SpawnScreen(0.2f, HomeScreen));
     }
 
     private void RecipeDataReceived(RecipeDataReceived_Event e)
     {
         Recipe = e.Recipe;
         CurrentIndex = 0;
+        HomeScreen.SetActive(false);
 
         GoToStep(CurrentIndex);
 
-        GameObject g = Instantiate(IngredientScreen);
-        g.SetActive(false);
-        g.SetActive(true);
-        g.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
+        IngredientsInstance = Instantiate(IngredientScreen);
+        IngredientsInstance.SetActive(false);
+        IngredientsInstance.SetActive(true);
+        IngredientsInstance.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
+        CurrentIndex = -1;
 
         IEnumerator _CallEvent()
         {
@@ -64,13 +64,13 @@ public class GameManager : MonoBehaviour
         StartCoroutine(_CallEvent());
     }
 
-    public static void GoToStep(int index)
+    public void GoToStep(int index)
     {
         if (index < Recipe.steps.Count)
         {
             Step s = Recipe.steps[index];
             EventBus.Publish<MainScreen_ShowData_Event>(new(
-                "Step " + index,
+                "Step " + Recipe.steps[index].step_number.ToString(),
                 s.description,
                 s.image_url));
             CurrentIndex = index;
@@ -90,8 +90,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void GoToNextStep()
+    public void GoToNextStep()
     {
-        GoToStep(CurrentIndex + 1);
+        if (CurrentIndex == -1)
+        {
+            GameObject g = Instantiate(Instance.MainScreen);
+            g.transform.position = Camera.main.transform.position + Camera.main.transform.forward*0.8f - Camera.main.transform.up*0.1f;
+            Debug.Log("g position: " + g.transform.position.ToString());
+            Instance.IngredientsInstance.transform.position = Instance.IngredientsInstance.transform.position  + Camera.main.transform.forward * 0.1f;
+        }
+        IEnumerator _Next()
+        {
+            yield return new WaitForSeconds(0.1f);
+            GoToStep(CurrentIndex + 1);
+        }
+        StartCoroutine(_Next());
     }
 }

@@ -465,6 +465,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: -0.095149025
       objectReference: {fileID: 0}
+    - target: {fileID: 5309144046584162075, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6183103830003031077, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_text
       value: example title
@@ -491,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -520,6 +524,10 @@ PrefabInstance:
     - target: {fileID: 6274735767350121842, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6645622171774857254, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
+      propertyPath: m_Size.z
+      value: 9.797175e-19
       objectReference: {fileID: 0}
     - target: {fileID: 6645622171774857254, guid: 9667aea6954e9ef4c9b1d4cf1e9354f7, type: 3}
       propertyPath: m_Enabled

@@ -17,13 +17,6 @@ MonoBehaviour:
   recognitionConfidenceLevel: 1
   speechCommands:
   - localizationKey: 
-    keyword: Menu
-    keyCode: 51
-    action:
-      id: 2
-      description: Menu
-      axisConstraint: 2
-  - localizationKey: 
     keyword: Select
     keyCode: 49
     action:
@@ -45,13 +38,6 @@ MonoBehaviour:
       description: Toggle Profiler
       axisConstraint: 0
   - localizationKey: 
-    keyword: Make Planes
-    keyCode: 52
-    action:
-      id: 0
-      description: None
-      axisConstraint: 0
-  - localizationKey: 
     keyword: Connect
     keyCode: 280
     action:
@@ -59,8 +45,8 @@ MonoBehaviour:
       description: None
       axisConstraint: 0
   - localizationKey: 
-    keyword: Reset Spawn
-    keyCode: 0
+    keyword: Cosmo
+    keyCode: 8
     action:
       id: 0
       description: None

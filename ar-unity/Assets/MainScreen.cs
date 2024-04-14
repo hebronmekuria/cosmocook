@@ -28,7 +28,6 @@ public class MainScreen : MonoBehaviour
     void Start()
     {
         EventBus.Subscribe<MainScreen_ShowData_Event>(ShowData);
-        EventBus.Publish<MainScreen_ShowData_Event>(new("CosmoCook", "What would you like to cook?", null));
     }
 
     [ContextMenu("func SetBackplateSize")]
@@ -138,6 +137,6 @@ public class MainScreen : MonoBehaviour
     [ContextMenu("func NextButtonPressed")]
     public void OnNextButtonPressed()
     {
-        GameManager.GoToNextStep();
+        Manager.Instance.GoToNextStep();
     }
 }

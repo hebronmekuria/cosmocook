@@ -23,6 +23,7 @@ public class IngredientsScreen : MonoBehaviour
 
     public List<IngredientItem> Ingredients;
     public GameObject IngredientPrefab;
+    public GameObject Checkmark;
 
     void Start()
     {
@@ -54,6 +55,13 @@ public class IngredientsScreen : MonoBehaviour
         {
             collider.size = quadSize;
         }
+    }
+
+    public void OnNextButtonPressed()
+    {
+        // show steps 
+        Manager.Instance.GoToNextStep();
+        Checkmark.SetActive(false);
     }
 
     private void ShowData(IngredientsScreen_ShowData_Event e)

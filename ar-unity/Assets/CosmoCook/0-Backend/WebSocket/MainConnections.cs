@@ -33,7 +33,7 @@ public class MainConnections : MonoBehaviour
     IEnumerator _ConnectWebSocket(string connectionString)
     {
         int i = 0;
-        while (!ConnectWebsocket(connectionString) && i < 5)
+        while (!ConnectWebsocket(connectionString) && i < 3)
         {
             Debug.Log("WebSocket: Connection Failed. Trying again in 2 seconds.");
             websocketConnected = false;

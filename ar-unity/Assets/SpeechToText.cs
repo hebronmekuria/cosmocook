@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.CognitiveServices.Speech;
 using TMPro;
+using System.Collections;
 
 #if PLATFORM_ANDROID
 using UnityEngine.Android;
@@ -18,12 +19,11 @@ using System.Collections;
 
 public class SpeechToText: MonoBehaviour
 {
-    // Hook up the two properties below with a Text and Button object in your UI.
-    public TextMeshPro outputText;
-
     private object threadLocker = new object();
     private bool waitingForReco;
     private string message;
+
+    public string type; // recipe, question
 
     private bool micPermissionGranted = false;
 
@@ -33,7 +33,19 @@ public class SpeechToText: MonoBehaviour
     private Microphone mic;
 #endif
 
-    public async void ButtonClick()
+    private void OnEnable()
+    {
+        Listen();
+
+        IEnumerator _DisableAfter(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            gameObject.SetActive(false);
+        }
+        StartCoroutine(_DisableAfter(7f));
+    }
+
+    public async void Listen()
     {
         // Creates an instance of a speech config with specified subscription key and service region.
         // Replace with your own subscription key and service region (e.g., "westus").
@@ -75,24 +87,14 @@ public class SpeechToText: MonoBehaviour
             {
                 message = newMessage;
                 waitingForReco = false;
+
+                Debug.Log("Voice command finished: " + message);
+
+                EventBus.Publish<VoiceCommandSend_Event>(new(type, message));
+                EventBus.Publish<LoadingStarted_Event>(new());
             }
         }
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        lock (threadLocker)
-        {
-            if (outputText != null)
-            {
-                outputText.text = message;
-            }
-        }
-    }
 }
 // </code>

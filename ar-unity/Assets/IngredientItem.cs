@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
+using System;
 
 public class IngredientItem : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class IngredientItem : MonoBehaviour
 
     private void OnIngredientFound(IngredientFound_Event e)
     {
-        if (e.ingredient == ingredient.name)
+        if (string.Equals(e.ingredient, ingredient.name, StringComparison.OrdinalIgnoreCase))
         {
             // found
             Checkbox.IsToggled = true;

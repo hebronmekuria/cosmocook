@@ -123,6 +123,8 @@ public class WebSocketClient : MonoBehaviour
 
     public void HandleJsonMessage(string jsonData)
     {
+        EventBus.Publish<LoadingFinished_Event>(new());
+
         // Deserialize the JSON into JsonMessage class
         JsonMessage jsonMessage = JsonUtility.FromJson<JsonMessage>(jsonData);
 

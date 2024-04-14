@@ -17,6 +17,18 @@ public class WebsocketDataHandler : MonoBehaviour
     public void Start()
     {
         wsClient = GetComponent<WebSocketClient>();
+        EventBus.Subscribe<VoiceCommandSend_Event>(e =>
+        {
+            Debug.Log("Voice command being sent");
+            if (e.type == "recipe")
+            {
+                SendRequest_GetRecipe(e.command);
+            }
+            else
+            {
+                SendRequest_AskQuestion(e.command);
+            }
+        });
     }
 
 
@@ -44,31 +56,53 @@ public class WebsocketDataHandler : MonoBehaviour
         request.type = "GET_RECIPE";
         request.data = new(query);
 
-        Debug.Log("(Send) Sending INITIAL data");
+        Debug.Log("(Send) Sending GET_RECIPE");
         
         // Convert the combined data to JSON format and send to WebSocket client
         string jsonData = JsonUtility.ToJson(request);
         
         wsClient.SendJsonData(jsonData);
     }
-
-    [ContextMenu("func Debug")]
-    public void Debugthis()
+    public void SendRequest_AskQuestion(string query)
     {
-        SendRequest_GetRecipe("greek salad");
-    }
+        Request_GetRecipe request = new();
+        request.type = "ASK_QUESTION";
+        request.data = new(query);
 
+        Debug.Log("(Send) Sending ASK_QUESTION");
+
+        // Convert the combined data to JSON format and send to WebSocket client
+        string jsonData = JsonUtility.ToJson(request);
+
+        wsClient.SendJsonData(jsonData);
+    }
     public void SendRequest_GetIngredient()
     {
         Request_GetIngredient request = new();
         request.type = "GET_INGREDIENT";
         request.data = "";
 
-        Debug.Log("(Send) Sending INITIAL data");
+        Debug.Log("(Send) Sending GET_INGREDIENT");
 
         // Convert the combined data to JSON format and send to WebSocket client
         string jsonData = JsonUtility.ToJson(request);
 
         wsClient.SendJsonData(jsonData);
+    }
+
+    [ContextMenu("func GET_RECIPE")]
+    public void Debugthis()
+    {
+        SendRequest_GetRecipe("greek salad");
+    }
+    [ContextMenu("func ASK_QUESTION")]
+    public void Debugthis2()
+    {
+        SendRequest_AskQuestion("How many serving is this?");
+    }
+    [ContextMenu("func GET_INGREDIENT")]
+    public void Debugthis3()
+    {
+        SendRequest_GetIngredient();
     }
 }

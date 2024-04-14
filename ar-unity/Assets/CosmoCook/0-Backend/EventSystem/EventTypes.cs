@@ -68,7 +68,6 @@ public class CreatePopup_Event
     }
 }
 
-
 public class RecipeDataReceived_Event
 {
     public RecipeData Recipe;
@@ -77,5 +76,18 @@ public class RecipeDataReceived_Event
     {
         Recipe = recipe_f;
         Debug.Log("RecipeDataReceived_Event");
+    }
+}
+
+public class VoiceCommandSend_Event
+{
+    public string type; // question, recipe
+    public string command;
+
+    public VoiceCommandSend_Event(string type_f, string command_f)
+    {
+        Debug.Log("VoiceCommandSend_Event: " + command_f);
+        type = type_f;
+        command = command_f;
     }
 }
