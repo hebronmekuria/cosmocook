@@ -809,7 +809,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068330958}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1639,6 +1639,54 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
+  - keyword: Debug get recipe
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8398407115219728467}
+          m_TargetAssemblyTypeName: WebSocketClient, Assembly-CSharp
+          m_MethodName: THISISADEBUGFUNCTION
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - keyword: Debug get answer
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8398407115219728467}
+          m_TargetAssemblyTypeName: WebSocketClient, Assembly-CSharp
+          m_MethodName: THISISALSOADEBUGFUNCTION
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - keyword: Debug get ingredient
+    response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8398407115219728467}
+          m_TargetAssemblyTypeName: WebSocketClient, Assembly-CSharp
+          m_MethodName: THISISANOTHERDEBUGFUNCTION
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
   persistentKeywords: 0
   speechConfirmationTooltipPrefab: {fileID: 0}
 --- !u!33 &8587249466170263282
@@ -1758,6 +1806,6 @@ SceneRoots:
   - {fileID: 835664603}
   - {fileID: 1504546655}
   - {fileID: 1628295348}
-  - {fileID: 1006371008966021930}
   - {fileID: 1068330960}
+  - {fileID: 1006371008966021930}
   - {fileID: 6978750891866288411}
