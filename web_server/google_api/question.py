@@ -39,15 +39,9 @@ def get_question_response(json_data, question, chat, redis_client):
 
     response = chat.send_message(prompt)
     result = response.text
+    result = result.replace('```json', '').replace('```', '')
+        
     print('Response received:', result)
-
-    # make sure the 'text' field is present
-    if 'text' not in result:
-        result['text'] = response.text
-
-    # remove the 'image_data' field if both 'video_url' and 'image_data' are present
-    if 'video_url' in result and 'image_data' in result:
-        del result['image_data']
 
     return result
 
