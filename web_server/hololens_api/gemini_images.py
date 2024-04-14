@@ -74,7 +74,6 @@ def prompt_with_latest_image(prompt="Describe this video.", full_video=False):
     """
     GOOGLE_API_KEY=os.getenv('GOOGLE_API_KEY')
     genai.configure(api_key=GOOGLE_API_KEY)
-    print(GOOGLE_API_KEY)
     video_file_name = find_newest_snip()
     extract_frame_from_video(video_file_path=video_file_name)
 
@@ -88,7 +87,7 @@ def prompt_with_latest_image(prompt="Describe this video.", full_video=False):
     uploaded_files = []
     print(f'Uploading {len(files_to_upload) if full_video else 1} files. This might take a bit...')
 
-    for file in files_to_upload if full_video else files_to_upload[0:1]:
+    for file in files_to_upload[-(min(6,len(files_to_upload))):] if full_video else files_to_upload[0:1]:
         print(f'Uploading: {file.file_path}...')
         response = genai.upload_file(path=file.file_path)
         file.set_file_response(response)
@@ -106,7 +105,7 @@ def prompt_with_latest_image(prompt="Describe this video.", full_video=False):
     # Make the LLM request.
     request = make_request(prompt, uploaded_files)
     response = model.generate_content(request,
-                                    request_options={"timeout": 600})
+                                    request_options={"timeout": 1800})
 
     print(f'Deleting {len(uploaded_files)} images. This might take a bit...')
     for file in uploaded_files:
