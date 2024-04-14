@@ -95,7 +95,7 @@ public class Manager : MonoBehaviour
         if (CurrentIndex == -1)
         {
             GameObject g = Instantiate(Instance.MainScreen);
-            g.transform.position = Camera.main.transform.position + Camera.main.transform.forward*0.8f - Camera.main.transform.up*0.1f;
+            g.transform.position = Camera.main.transform.position + Camera.main.transform.forward*0.4f - Camera.main.transform.up*0.1f;
             Debug.Log("g position: " + g.transform.position.ToString());
             Instance.IngredientsInstance.transform.position = Instance.IngredientsInstance.transform.position  + Camera.main.transform.forward * 0.1f;
         }
