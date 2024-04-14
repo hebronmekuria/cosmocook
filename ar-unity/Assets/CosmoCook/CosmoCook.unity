@@ -1470,6 +1470,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2533021690685311617, guid: 4cf3d3a17523a624dbfcb28a59ffff4f, type: 3}
+      propertyPath: m_text
+      value: Cosmocook!
+      objectReference: {fileID: 0}
+    - target: {fileID: 2533021690685311617, guid: 4cf3d3a17523a624dbfcb28a59ffff4f, type: 3}
+      propertyPath: m_fontStyle
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 2706133822796850237, guid: 4cf3d3a17523a624dbfcb28a59ffff4f, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 6
