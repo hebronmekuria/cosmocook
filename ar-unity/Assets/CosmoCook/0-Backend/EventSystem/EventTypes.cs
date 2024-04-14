@@ -56,6 +56,13 @@ public class LoadingFinished_Event
     }
 }
 
+public class FlipHandUp_Event
+{
+    public FlipHandUp_Event()
+    {
+        Debug.Log("FlipHandUp_Event");
+    }
+}
 
 public class CreatePopup_Event
 {

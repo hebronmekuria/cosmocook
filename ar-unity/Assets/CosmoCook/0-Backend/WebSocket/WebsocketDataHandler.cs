@@ -29,6 +29,10 @@ public class WebsocketDataHandler : MonoBehaviour
                 SendRequest_AskQuestion(e.command);
             }
         });
+        EventBus.Subscribe<FlipHandUp_Event>(e =>
+        {
+            SendRequest_GetIngredient();
+        });
     }
 
 
